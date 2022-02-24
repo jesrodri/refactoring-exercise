@@ -26,6 +26,7 @@ module PurchasesHandler
           )
         end
       end
+      @order.save
     end
   end
 end

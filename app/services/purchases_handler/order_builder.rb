@@ -1,17 +1,17 @@
 module PurchasesHandler
-  class OrderCreator < ApplicationService
+  class OrderBuilder < ApplicationService
     def initialize(user, address_params)
       @user = user
       @address_params = address_params
     end
     
     def call
-      order_creator
+      order_builder
     end
 
     private
 
-    def order_creator
+    def order_builder
       @order = Order.new(
         user: @user,
         first_name: @user.first_name,
