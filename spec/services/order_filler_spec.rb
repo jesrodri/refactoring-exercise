@@ -1,23 +1,20 @@
 require 'rails_helper'
 
-RSpec.describe PurchasesHandler::OrderFiller, type: :request do
-  include Requests
+RSpec.describe PurchasesHandler::OrderFiller, type: :service do
 
   describe "#call" do
-    subject(:request!) { post '/purchases', params: params }
 
-    context "when order is filled with cart items" do
-      let(:gateway) { :paypal }
-      let(:params) { { gateway: gateway, cart_id: cart_id } }
-      let(:user) { create(:user) }
-      let(:cart) { create(:cart, user: user) }
-      let(:cart_id) { cart.id }
-      let(:order) { order }
+    context "when it is successful" do
+      let(:sale) { create(:sale) }
+      let(:item) { create(:cart_item, sale: sale, quantity: 3) }
+      let(:order) { create(:order, user: item.cart.user) }
 
-      before { request! }
+      it "fills order with cart items" do
+        expect { PurchasesHandler::OrderFiller.call(item.cart, order) }.to change(OrderLineItem, :count).by(item.quantity)
+      end
 
-      it "returns ok status" do
-        expect(response).to have_http_status(:ok)  
+      it "saves order" do
+        expect { PurchasesHandler::OrderFiller.call(item.cart, order) }.to change(Order, :count).by(1)
       end
     end
 

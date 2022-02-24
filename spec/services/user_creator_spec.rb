@@ -1,23 +1,26 @@
 require 'rails_helper'
 
-RSpec.describe PurchasesHandler::UserCreator, type: :request do
-  include Requests
+RSpec.describe PurchasesHandler::UserCreator, type: :service do
 
   describe "#call" do
-    subject(:request!) { post '/purchases', params: params }
 
     context "when cart has a user" do
-      let(:gateway) { :paypal }
-      let(:params) { { gateway: gateway, cart_id: cart_id } }
-      let(:user) { create(:user) }
-      let(:cart) { create(:cart, user: user) }
-      let(:cart_id) { cart.id }
-      let(:order) { order }
+      let(:cart) { create(:cart) }
+      it "returns cart user" do
+        expect(PurchasesHandler::UserCreator.call(cart, {})).to eq(cart.user)
+      end
+    end
 
-      before { request! }
+    context "when cart does not have a user" do
+      let(:cart_without_user) { create(:cart, user: nil) }
+      let(:purchase_params) { {
+        user: {email: 'user2@spec.io',
+          first_name: "Johnny",
+          last_name: "Bravo" } }
+      }
 
-      it "returns ok status" do
-        expect(response).to have_http_status(:ok)  
+      it "creates guest user" do
+        expect { PurchasesHandler::UserCreator.call(cart_without_user, purchase_params) }.to change(User, :count).by(1)
       end
     end
 
