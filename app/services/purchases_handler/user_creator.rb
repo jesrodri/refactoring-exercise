@@ -6,12 +6,6 @@ module PurchasesHandler
     end
     
     def call
-      user_creator
-    end
-
-    private
-
-    def user_creator
       @user = if @cart.user.nil?
         user_params = @purchase_params[:user] ? @purchase_params[:user] : {}
         User.create(**user_params.merge(guest: true))

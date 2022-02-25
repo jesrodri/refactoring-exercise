@@ -13,8 +13,7 @@ class PurchasesController < ApplicationController
   private
   
   def purchase_handler
-    cart_id = purchase_params[:cart_id]
-    cart = Cart.find_by(id: cart_id)
+    cart = Cart.find_by(id: purchase_params[:cart_id])
 
     return render json: { errors: [{ message: 'Cart not found!' }] }, status: :unprocessable_entity unless cart
 

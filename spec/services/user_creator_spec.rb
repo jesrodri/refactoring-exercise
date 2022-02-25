@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe PurchasesHandler::UserCreator, type: :service do
 
-  describe "#call" do
+  describe ".call" do
 
     context "when cart has a user" do
       let(:cart) { create(:cart) }
@@ -23,7 +23,5 @@ RSpec.describe PurchasesHandler::UserCreator, type: :service do
         expect { PurchasesHandler::UserCreator.call(cart_without_user, purchase_params) }.to change(User, :count).by(1)
       end
     end
-
   end
-  
 end

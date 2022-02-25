@@ -9,12 +9,6 @@ module PurchasesHandler
     end
     
     def call
-      order_filler
-    end
-
-    private
-
-    def order_filler
       @cart.items.each do |item|
         item.quantity.times do
           @order.items << OrderLineItem.new(
