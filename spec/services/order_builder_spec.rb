@@ -8,7 +8,7 @@ RSpec.describe PurchasesHandler::OrderBuilder, type: :service do
 
     it "builds order" do
       order = PurchasesHandler::OrderBuilder.call(user, {})
-      expect(order).to be_valid  
+      expect(order).to have_attributes(:user_id => 1, :first_name => "John", :last_name => "Doe", :address_1 => nil, :address_2 => nil, :city => nil, :state => nil, :country => nil, :zip => nil)
     end
   end
 end
